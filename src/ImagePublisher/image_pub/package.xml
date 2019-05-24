@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>image_pub</name>
+  <version>0.1.0</version>
+  <description>
+	  It provides a means to publush an image as sensor_msgs/Image.msg into the topics:
+	  + /camera + /camera_info
+	  +
+  </description>
+  <maintainer email="noname@gmail.com">Juan Carlos Gomez</maintainer>
+  <license>BSD</license>
+  <url type="website"></url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>opencv3</depend>
+</package>
