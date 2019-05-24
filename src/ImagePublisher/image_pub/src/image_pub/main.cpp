@@ -3,6 +3,10 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 
+/*
+ * Usage
+ * $ rosrun image_transport_tutorial my_publisher path/to/some/image.jpg
+ */
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "image_publisher");
