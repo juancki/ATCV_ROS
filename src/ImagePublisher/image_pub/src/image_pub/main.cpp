@@ -15,7 +15,15 @@ int main(int argc, char** argv)
   image_transport::Publisher pub = it.advertise("camera/image", 1);
   ros::Publisher pub_info = nh.advertise<sensor_msgs::CameraInfo>("camera/camera_info",1);
   cv::Mat image = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-  double  k[] = {1060, 0, image.cols/2,  0, 1060, image.cols/2,0,0 , 1};
+  // height: 1080
+  // width: 1920
+  // D: [0.0, 0.0, 0.0, 0.0, 0.0]
+  // K: [1.0, 0.0, 960.0, 0.0, 1.0, 540.0, 0.0, 0.0, 1.0]
+  // R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+  // P: [1.0, 0.0, 960.0, 0.0, 0.0, 1.0, 540.0, 0.0, 0.0, 0.0, 1.0, 0.0]
+
+  double  k[] = {1060, 0, image.height/2,  0, 1060, image.cols/2,0,0 , 1};
+  double p [] = {1.0, 0.0,  image.height/2, 0.0, 0.0, 1.0,  image.cols/2.0, 0.0, 0.0, 0.0, 1.0, 0.0};
   cv::waitKey(30);
   sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", image).toImageMsg();
   sensor_msgs::CameraInfo msg_info = sensor_msgs::CameraInfo();
