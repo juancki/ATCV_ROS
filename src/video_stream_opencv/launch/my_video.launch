@@ -1,42 +1,72 @@
 <launch>
   <!-- launch video stream -->
   <include file="$(find video_stream_opencv)/launch/camera.launch">
-    <!-- node name and ros graph name -->
     <arg name="camera_name" value="camera"/>
-    <!-- means video device 0, /dev/video0 -->
     <arg name="video_stream_provider" value="/home/juancki/Downloads/Video2.MOV"/>
-    <arg name="fps" value=".1"/>
-    <arg name="set_camera_fps" value=".1"/>
+    <arg name="fps" value=".5"/>
+    <arg name="set_camera_fps" value=".5"/>
     <arg name="flip_horizontal" value="false"/>
-    <!-- flip the image vertically -->
     <arg name="flip_vertical" value="false"/>
-    <!-- visualize on an image_view window the stream generated -->
     <arg name="visualize" value="false"/>
   </include>
+
+  <!-- <node name="camera_fake" pkg="image_pub" args="/home/juancki/Downloads/IMG_7478.jpg"  type="img_pub" output="screen" respawn="false"/> -->
+
+
+
 
   <node name="aruco_detect4x4" pkg="aruco_detect" type="aruco_detect" output="screen" respawn="false">
     <remap from="/fiducial_images" to="fiducial_images4x4"/>
     <param name="dictionary" value="1"/>
+    <param name="fiducial_len" value="0.04" type="double"/>
     <param name="publish_images" value="true"/>
     <remap from="/camera/compressed" to="/camera/image_raw/compressed"/>
+    <!-- <remap from="/camera" to="/camera/image"/> -->
     <remap from="/camera" to="/camera/image_raw"/>
     <remap from="/camera_info" to="camera/camera_info"/>
   </node>
 
-  <node name="aruco_detect5x5" pkg="aruco_detect" type="aruco_detect" output="screen" respawn="false">
+<!--  <node name="aruco_detect5x5" pkg="aruco_detect" type="aruco_detect" output="screen" respawn="false">
     <remap from="/fiducial_images" to="fiducial_images5x5"/>
 
-    <param name="dictionary" value="5"/>
+    <param name="dictionary" value="10"/>
     <param name="publish_images" value="true"/>
     <remap from="/camera/compressed" to="/camera/image_raw/compressed"/>
+    <remap from="/camera" to="/camera/image"/>
     <remap from="/camera" to="/camera/image_raw"/>
     <remap from="/camera_info" to="camera/camera_info"/>
-  </node>
+  </node>-->
+
+
+  <!-- <node name="aruco_detect5x52" pkg="aruco_detect" type="aruco_detect" output="screen" respawn="false">
+    <remap from="/fiducial_images" to="fiducial_images5x52"/>
+
+    <param name="dictionary" value="9"/>
+    <param name="publish_images" value="true"/>
+    <remap from="/camera/compressed" to="/camera/image_raw/compressed"/>
+    <remap from="/camera" to="/camera/image"/>
+    <remap from="/camera" to="/camera/image_raw"/>
+    <remap from="/camera_info" to="camera/camera_info"/>
+  </node> -->
+
   <node name="image_view4x4" pkg="image_view" type="image_view" args="" output="screen" respawn="false">
     <remap from="image" to="/fiducial_images4x4"/>
   </node>
-  <node name="image_view5x5" pkg="image_view" type="image_view" args="" output="screen" respawn="false">
+  <!-- <node name="image_view5x5" pkg="image_view" type="image_view" args="" output="screen" respawn="false">
     <remap from="image" to="/fiducial_images5x5"/>
   </node>
+  <node name="image_view5x52" pkg="image_view" type="image_view" args="" output="screen" respawn="false">
+    <remap from="image" to="/fiducial_images5x52"/>
+  </node> -->
+
+  <node name="fiducial_slam" pkg="fiducial_slam" type="fiducial_slam" args="" output="screen" respawn="false">
+  </node>
+
+  <include file="$(find fiducial_slam)/launch/fiducial_rviz.launch">
+    <remap from="/fiducial_images" to="/fiducial_images4x4"/>
+  </include>
+  <node pkg="tf" type="static_transform_publisher" name="odom_base_broadcaster" args="0 0 0 0 0 0 1 odom camera 500" />
+  <node pkg="tf" type="static_transform_publisher" name="robot_cam_broadcaster" args="0 0 0 0 0 0 1 fid12 map 500" />
+  <node pkg="tf" type="static_transform_publisher" name="w_cam_broadcaster" args="0 0 0 0 0 0 1 odom robot 500" />
 
 </launch>

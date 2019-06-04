@@ -36,6 +36,11 @@ add_executable(img_pub
 add_dependencies(img_pub ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 target_link_libraries(img_pub ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
+add_executable(fid_tf
+  src/image_pub/fid_tf.cpp)
+add_dependencies(fid_tf ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
+target_link_libraries(fid_tf ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
 add_executable(img_sub
   src/image_pub/img_sub.cpp)
 add_dependencies(img_sub ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
